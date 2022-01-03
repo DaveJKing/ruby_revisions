@@ -1,59 +1,13 @@
-puts "running Checkout"
+require_relative "lib/checkoutObjects.rb"
+require_relative "lib/methods.rb"
+puts "Running Checkout ........"
 
-class LinearDiscount
-  # puts "hello from initialise Linear Discount"
+debug = true
+puts (debug ? "Debug mode operating " : "Not in debug mode")
 
-  attr_reader :discount_price ,:quantity
-  def initialize(discount_price, quantity)
-    @discount_price = discount_price
-    @quantity = quantity
-  end
+# Set rules for priceplocy and discounts
+# Item pricing policy would normally be consumed from a db.
 
-  #discount price type is linear
-  # ------------------------------------
-  # def calculate_for(quantity)
-  #   (quantity / @quantity).floor * @discount_price
-  # end
-end
-
-class BatchDiscount
-  attr_reader :batch_threshold_trigger, :gets_free, :occurs
-  def initialize(batch_threshold_trigger, gets_free, occurs)
-    
-    # puts "hello from initialise Batch Discount"
-
-    @batch_threshold_trigger = batch_threshold_trigger
-    @gets_free = gets_free
-    @occurs = occurs
-  end
-
-  #discount price type is linear
-  # ------------------------------------
-  # def calculate_for(quantity)
-  #   (quantity / @quantity).floor * @discount_price
-  # end
-end
-
-class PricePolicy
-  attr_reader :base_price, :discounts
-
-  def initialize(base_price, *discounts)
-    @base_price = base_price
-    @discounts = discounts
-  end
-
-  # def price_for(quantity)
-  #   quantity * @base_price - discount_for(quantity)
-  # end
-
-  # def discount_for(quantity)
-  #   @discounts.inject(0) do |mem, discount|
-  #     mem + discount.calculate_for(quantity)
-  #   end
-  # end
-end
-
-# Rules are a hash
 RULES = {
   "A" => PricePolicy.new(50, LinearDiscount.new(20, 3)),
   "B" => PricePolicy.new(30, LinearDiscount.new(15, 2)),
@@ -63,43 +17,53 @@ RULES = {
   # Above buy 2 get 1 free , only one cycle
   "F" => PricePolicy.new(30, BatchDiscount.new(3, 2, -1)),
 # Above buy 2 get 1 free , perpetual  i.e no limit
-
 }
-puts RULES
-puts RULES.class
 
-puts RULES.has_key?("A")
-puts RULES.has_key?("X")
+class Checkout
 
-#user.extract!("email").values # ["john@email.com"]
+  attr_accessor  :loyaltycardno, :items
 
-# for number in RULES
-#   print number
-# end
-puts RULES["F"]
-
-x = RULES["F"]
-y = x
-puts "item base price : " + x.base_price.to_s
-puts x.discounts[0].class.name
-puts x.class.name
-
-case x.discounts[0].class.name
-when "LinearDiscount", "lineardiscount"
-  puts "Linear Discount encountered"
-  puts "Item is sold at " + x.base_price.to_s + " initially. then " + x.discounts[0].discount_price.to_s + " after quantity of " + x.discounts[0].quantity.to_s
-when "BatchDiscount", "baychdiscount"
-  puts "Batch Discount encountered"
-  puts "Item is sold at " + x.base_price.to_s + " initially, then after " + x.discounts[0].batch_threshold_trigger.to_s + " item purchases buyer gets " + x.discounts[0].gets_free.to_s
-  if x.discounts[0].occurs == -1
-    puts "this discount cycles indefinitely !"
-  else
-    puts "this discount cycles " + x.discounts[0].occurs.to_s + " times(s) only"
+  def initialize()
+    @items = Hash.new
   end
-else
-  puts "unknown discount policy"
+
+  def scan(item,*loyaltyCardNoRef)
+
+    if item.downcase != "clubcard"
+      @items[item] ||= 0
+      @items[item] += 1
+    end
+   
+    print "Scanned item #{item} " 
+    self.loyaltycardno =loyaltyCardNoRef[0].to_s unless loyaltyCardNoRef.empty?
+  end
+  
 end
 
-# puts RULES["A"]
+co = Checkout.new
+co.scan("A")
+co.scan("A")
+co.scan("B")
+co.scan("Clubcard","123456")
+co.scan("A")
+co.scan("C")
+co.scan("F")
+# co.scan("Clubcard","123456")
+# co.scan("Voucher","999")
 
-puts "end"
+puts (co.loyaltycardno.nil? ? "No loyalty card" : "Loyalty card #{co.loyaltycardno} was scanned " )
+
+# puts RULES
+# puts (RULES.has_key?("A") ? "Key exists :-) " : "Key does not exist :-(")
+
+itemHash = co.items
+for item,number in itemHash
+  puts "#{item},#{number}"
+  showDiscountStrategy(RULES[item],debug)
+end
+
+# itemRule = RULES["A"]
+# showDiscountStrategy(itemRule,debug)
+
+
+puts "End of checkout !"

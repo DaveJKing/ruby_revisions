@@ -2,7 +2,7 @@ class Dog
     # attr_reader :name, :height, :weight #setters
     # attr_writer :name, :height, :weight #getters
 
-    attr_accessor :name, :height, :weight
+attr_accessor :name, :height, :weight    
 
     def bark
         return "Yelp"
