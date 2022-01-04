@@ -23,10 +23,10 @@ class PricePolicy
 class LinearDiscount
     # puts "hello from initialise Linear Discount"
   
-    attr_reader :discount_price ,:quantity
-    def initialize(discount_price, quantity)
+    attr_reader :discount_price ,:quantity_threshold
+    def initialize(discount_price, quantity_threshold)
       @discount_price = discount_price
-      @quantity = quantity
+      @quantity_threshold = quantity_threshold
     end
   
   end
