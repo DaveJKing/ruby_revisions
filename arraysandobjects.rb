@@ -20,21 +20,19 @@ RULES = {
   # Above buy 2 get 1 free , perpetual  i.e no limit
 }
 
-
-
 checkout = Checkout.new
+
 checkout.scan("A")
 checkout.scan("A")
 checkout.scan("A")
 checkout.scan("A")
-# checkout.scan("A")
-# checkout.scan("B")
+checkout.scan("D")
 checkout.scan("X")
 checkout.scan("F")
 checkout.scan("Clubcard","123456")
+checkout.scan("Clubcard","6666666")
 
 puts (checkout.loyaltycardno.nil? ? "No loyalty card scanned " : "Loyalty card #{checkout.loyaltycardno} was scanned " )
-
 
 checkout.total_up
 

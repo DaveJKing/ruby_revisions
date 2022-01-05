@@ -24,12 +24,9 @@ class Checkout
     
 
     def total_up
-        loop = 0
-        puts @items
-        for item,itemQuanityPurchased in self.items
-
-            loop +=1
-            # puts "loop item " + item.to_s
+     
+        # puts @items
+        for item,itemQuanityPurchased in @items
 
             itemRule = RULES[item]
             itemRuleDiscount = itemRule.discounts[0]
@@ -51,12 +48,12 @@ class Checkout
                     # "Discount threshold NOT reached !"
                     @basket_total += itemQuanityPurchased * itemRule.base_price
                 end
-
             when "BatchDiscount", "batchdiscount"
-
-              puts "Batch discount item !"
-              @basket_total += itemQuanityPurchased * itemRule.base_price
-              
+                puts "Batch discount item !"
+                @basket_total += itemQuanityPurchased * itemRule.base_price
+            else
+                puts "No discount"
+                @basket_total += itemQuanityPurchased * itemRule.base_price
             end
          end      
     end
@@ -88,6 +85,4 @@ class BatchDiscount
     @gets_free = gets_free
     @occurs = occurs
   end
-
-  
 end
