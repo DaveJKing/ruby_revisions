@@ -15,7 +15,9 @@ class Checkout
             # item is not in stock database, handle and report 
             puts "*** Item not in inventoty database - Inform shopper Item removed fom sale to be polite. ***"
         else
+            # add an initialise to 0 if not existing
             @items[item] ||= 0
+            # increment item count +1, 
             @items[item] += 1
         end
       end 

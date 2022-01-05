@@ -3,8 +3,28 @@
 number_hash = {"PI" => 3.14, "Golden" => 1.618, "e" => 2.788}
 puts number_hash["PI"]
 
+
+
+items = {"A" =>  1, "B" => 0}
+puts items
+
+# items[item] ||= 0
+items["A"] ||= 0
+puts items
+items["A"] += 1
+puts items
+
+items["C"] ||= 0
+items["C"] += 1
+items["A"] += 1
+puts items
+
 superheroes = Hash["Clark Kent","Superman",
                     "Bruce Wayne","Batman"]
+
+
+
+
 
 puts superheroes["Clark Kent"]
 
