@@ -13,7 +13,7 @@ class Checkout
             check = RULES.fetch(item)
         rescue => exception
             # item is not in stock database, handle and report 
-            puts "Inform shopper Item removed fom sale to be polite."
+            puts "*** Item not in inventoty database - Inform shopper Item removed fom sale to be polite. ***"
         else
             @items[item] ||= 0
             @items[item] += 1
@@ -24,36 +24,46 @@ class Checkout
     
 
     def total_up
-    
-        for item,itemQuanityPurchased in @items
-        
+        loop = 0
+        puts @items
+        for item,itemQuanityPurchased in self.items
+
+            loop +=1
+            # puts "loop item " + item.to_s
+
             itemRule = RULES[item]
             itemRuleDiscount = itemRule.discounts[0]
+
+            # puts itemRule.discounts[0].class.name
 
             case itemRule.discounts[0].class.name
             when "LinearDiscount", "lineardiscount"
                 if itemQuanityPurchased > itemRuleDiscount.quantity_threshold 
                     # "Discount threshold passed !"
                   
-                  baseTotal = itemRule.base_price * (itemRuleDiscount.quantity_threshold )
+                    baseTotal = itemRule.base_price * (itemRuleDiscount.quantity_threshold )
             
-                  discountQty = itemQuanityPurchased - (itemRuleDiscount.quantity_threshold )
-                  discountTotal = discountQty * itemRuleDiscount.discount_price
-                  @basket_total = baseTotal + discountTotal
-                
+                    discountQty = itemQuanityPurchased - (itemRuleDiscount.quantity_threshold )
+                    discountTotal = discountQty * itemRuleDiscount.discount_price
+                    @basket_total += baseTotal + discountTotal
+                          
                 else
-                    # "Discount hreshold NOT reached !"
-                    @total_total = itemQuanityPurchased * itemRule.base_price
+                    # "Discount threshold NOT reached !"
+                    @basket_total += itemQuanityPurchased * itemRule.base_price
                 end
-            end
-         end
-    end
 
+            when "BatchDiscount", "batchdiscount"
+
+              puts "Batch discount item !"
+              @basket_total += itemQuanityPurchased * itemRule.base_price
+              
+            end
+         end      
+    end
 end
 
 class PricePolicy
   attr_reader :base_price, :discounts
-
   def initialize(base_price, *discounts)
     @base_price = base_price
     @discounts = discounts

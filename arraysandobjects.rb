@@ -16,7 +16,7 @@ RULES = {
   "D" => PricePolicy.new(15),
   "E" => PricePolicy.new(30, BatchDiscount.new(2, 1, 1)),
   # Above buy 2 get 1 free , only one cycle
-  "F" => PricePolicy.new(30, BatchDiscount.new(3, 2, -1)),
+  "F" => PricePolicy.new(50, BatchDiscount.new(3, 2, -1)),
   # Above buy 2 get 1 free , perpetual  i.e no limit
 }
 
@@ -27,13 +27,16 @@ checkout.scan("A")
 checkout.scan("A")
 checkout.scan("A")
 checkout.scan("A")
-# checkout.scan("X")
-
+# checkout.scan("A")
+# checkout.scan("B")
+checkout.scan("X")
+checkout.scan("F")
 checkout.scan("Clubcard","123456")
 
 puts (checkout.loyaltycardno.nil? ? "No loyalty card scanned " : "Loyalty card #{checkout.loyaltycardno} was scanned " )
 
-checkout.total_up
-puts "Basket total : #{checkout.basket_total.to_s} pence"
 
+checkout.total_up
+
+puts "Basket total : #{checkout.basket_total.to_s} pence"
 puts "End of checkout !"
