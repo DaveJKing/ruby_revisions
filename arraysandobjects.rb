@@ -89,6 +89,13 @@ class Checkout
               end
 
               @basket_total += total
+          when "PercentDiscount", "percentdiscount"
+               puts "Percent discount"
+
+               undiscountedTotal = itemQuanityPurchased * itemRule.base_price
+               discount = (undiscountedTotal * itemRuleDiscount.percentile)/100
+               total = undiscountedTotal - discount
+               puts "Total : #{total}"
           else
               puts "No discount"
               @basket_total += itemQuanityPurchased * itemRule.base_price
@@ -104,11 +111,11 @@ RULES = {
   "orange" => PricePolicy.new(20),
   "pear" => PricePolicy.new(20),
   # half price bananas
-  "banana" => PricePolicy.new(15),
+  "banana" => PricePolicy.new(30, PercentDiscount.new(50)),
   "pineapple" => PricePolicy.new(30, BatchDiscount.new(2, 1, 1)),
   "mango" => PricePolicy.new(200, BatchDiscount.new(3, 1, 1)),
   
-  
+ 
 
   # "apple" => PricePolicy.new(10, LinearDiscount.new(30, 3)),
   # "orange" => PricePolicy.new(20, LinearDiscount.new(15, 2)),
@@ -131,6 +138,9 @@ checkout.scan("mango")
 checkout.scan("mango")
 checkout.scan("mango")
 checkout.scan("mango")
+
+checkout.scan("banana")
+checkout.scan("banana")
 
 # checkout.scan("apple")
 #  checkout.scan("apple")
