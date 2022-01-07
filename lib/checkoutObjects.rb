@@ -101,3 +101,14 @@ class PercentDiscount
     @percentile = percentile
   end
 end
+
+
+# For system testing only
+class RogueDiscount
+    #  Buy n get y free, happens prefined times or perpetually
+    attr_reader :percentile
+  
+    def initialize(percentile)
+      @percentile = percentile
+    end
+  end
