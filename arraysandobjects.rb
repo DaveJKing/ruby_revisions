@@ -109,10 +109,10 @@ RULES = {
   # 2 for 1 apple (half price)
   "apple" => PricePolicy.new(10, BatchDiscount.new(2, 1, -1)), #bogoff
   "orange" => PricePolicy.new(20),
-  "pear" => PricePolicy.new(20),
+  "pear" => PricePolicy.new(15),
   # half price bananas
   "banana" => PricePolicy.new(30, PercentDiscount.new(50)),
-  "pineapple" => PricePolicy.new(30, BatchDiscount.new(2, 1, 1)),
+  "pineapple" => PricePolicy.new(100, BatchDiscount.new(2, 1, 1)),
   "mango" => PricePolicy.new(200, BatchDiscount.new(3, 1, 1)),
   
  
