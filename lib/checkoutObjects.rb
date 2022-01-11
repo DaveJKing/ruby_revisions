@@ -1,19 +1,38 @@
+
+# require_relative "dbstuff.rb"
 puts "Loading objects ....."
 
 class Checkout
-  attr_accessor  :loyaltycardno, :items, :basket_total,:db_view
+  attr_accessor  :loyaltycardno, :items, :basket_total,:db
   def initialize()
     @items = Hash.new
     @basket_total = 0  
+    @db = Hash.new
   end
 
- 
+  def connectdb
+
+    pricing_rules = {
+  
+      "apple" => PricePolicy.new(10, BatchDiscount.new(2, 1, -1)), #bogoff
+      "orange" => PricePolicy.new(20),
+      "pear" => PricePolicy.new(15),
+      "banana" => PricePolicy.new(30, PercentDiscount.new(50)),
+      "pineapple" => PricePolicy.new(100, BatchDiscount.new(2, 1, 1)),
+      "mango" => PricePolicy.new(200, BatchDiscount.new(3, 1, 1)),
+      "rogue" => PricePolicy.new(30, RogueDiscount.new(50)), 
+    }
+      self.db = pricing_rules
+  end
+
   def scan(item,*loyaltyCardNoRef)
     if item.downcase != "clubcard"
       begin
-          check = DB_VIEW.fetch(item)
+        puts "item #{item}"
+        
+         check = @db.fetch(item)
       rescue => exception
-          puts "*** Item not in inventoty database,report - Inform shopper Item removed fom sale to be polite. ***"
+          puts "*** Item not in inventory database,report - Inform shopper Item removed fom sale to be polite. ***"
       else
           # add an initialise to 0 if not existing
           @items[item] ||= 0
@@ -25,11 +44,11 @@ class Checkout
   
 
   def total
-   
+      @basket_total = 0
       # puts @items
       for item,itemQuanityPurchased in @items
 
-          itemRule = DB_VIEW[item]
+          itemRule = @db[item]
           itemRuleDiscount = itemRule.discounts[0]
           
           case itemRule.discounts[0].class.name
@@ -99,11 +118,11 @@ class Checkout
               if itemRule.discounts[0].class.name == "NilClass"
                 @basket_total += itemQuanityPurchased * itemRule.base_price
               else
-                puts "*** Unable to cater for Discount policy - Inform shopper Item removed fom sale to be polite. ***"
+                puts "*** Unable to cater for Discount policy - Inform shopper Item removed from sale to be polite. ***"
                 puts "*** Handle by reporting to systems team via e.g sentry  ***"
               end
           end
-       end      
+      end      
   end
 end
 
@@ -155,3 +174,4 @@ class RogueDiscount
     @percentile = percentile
   end
 end
+

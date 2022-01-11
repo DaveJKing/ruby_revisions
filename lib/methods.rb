@@ -20,4 +20,4 @@ def showDiscountStrategy(itemRule, debug)
         puts "unknown discount policy"
       end
     end
-  end
+end

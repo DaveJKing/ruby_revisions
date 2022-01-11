@@ -1,6 +1,8 @@
-require_relative "checkoutObjects.rb"
-require_relative "methods.rb"
-require_relative "dbstuff.rb"
+require_relative "checkout.rb"
+# require_relative "methods.rb"
+# require_relative "dbstuff.rb"
+
+
 
 puts "Running Checkout ........"
 
@@ -13,21 +15,28 @@ puts (debug ? "Debug mode operating " : "Not in debug mode")
 # Cater for unknown discount policy 'RogueDiscount'
 # ***************************************************************
 
+# DB_VIEW = connectdb
+
 
 if debug
 
     # Set rules for pricepolicy and discounts
     # Item pricing policy would normally be consumed from a db.
     # This is has global scope to facilitate that simulation
-    DB_VIEW = connectdb
-
-    
+  
     checkout = Checkout.new
+    # checkout.connectdb
 
     checkout.scan("apple")
     checkout.scan("apple")
-    checkout.scan("apple")
+    # checkout.scan("apple")
 
+    checkout.total
+
+    puts "Basket total : #{checkout.basket_total.to_s} pence"
+
+    checkout.scan("apple")
+    
     checkout.scan("Clubcard","123456")
     checkout.scan("Clubcard","6666666")
 
@@ -40,3 +49,4 @@ if debug
 end 
 
 puts "End of checkout !"
+

@@ -14,3 +14,51 @@ pricing_rules = {
 
   return pricing_rules
 end
+
+class PricePolicy
+  attr_reader :base_price, :discounts
+
+  def initialize(base_price, *discounts)
+    @base_price = base_price
+    @discounts = discounts
+  end
+end
+
+class LinearDiscount
+  # Base price operates but discount price kicks in after quantity threshold
+  attr_reader :discount_price, :quantity_threshold
+
+  def initialize(discount_price, quantity_threshold)
+    @discount_price = discount_price
+    @quantity_threshold = quantity_threshold
+  end
+end
+
+class BatchDiscount
+  #  Buy n get y free, happens prefined times or perpetually
+  attr_reader :buys, :gets_free, :occurs_max
+
+  def initialize(buys, gets_free, occurs_max)
+    @buys = buys
+    @gets_free = gets_free
+    @occurs_max = occurs_max
+  end
+end
+
+class PercentDiscount
+  #  Precentage reductio e.g half price = -50%
+  attr_reader :percentile
+
+  def initialize(percentile)
+    @percentile = percentile
+  end
+end
+
+# For system testing only
+class RogueDiscount
+  attr_reader :percentile
+
+  def initialize(percentile)
+    @percentile = percentile
+  end
+end
