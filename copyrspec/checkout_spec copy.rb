@@ -49,6 +49,8 @@ RSpec.describe Checkout do
       end
     end
 
+    #-------------------------------------------------------------------
+
     context 'when a two for 1 applies on pears' do
       before do
         checkout.scan(:pear)
@@ -70,6 +72,9 @@ RSpec.describe Checkout do
       end
     end
 
+    #------------------------------------------------------ 
+
+
     context 'when a half price offer applies on bananas' do
       before do
         checkout.scan(:banana)
@@ -79,6 +84,9 @@ RSpec.describe Checkout do
         expect(total).to eq(15)
       end
     end
+
+    #------------------------------------------------------ 
+
 
     context 'when a half price offer applies on pineapples restricted to 1 per customer' do
       before do
@@ -90,6 +98,9 @@ RSpec.describe Checkout do
         expect(total).to eq(150)
       end
     end
+
+    #------------------------------------------------------ 
+
 
     context 'when a buy 3 get 1 free offer applies to mangos' do
       before do

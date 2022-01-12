@@ -25,26 +25,31 @@ if debug
     # This is has global scope to facilitate that simulation
   
     checkout = Checkout.new
-    # checkout.connectdb
+ 
 
-    checkout.scan("apple")
-    checkout.scan("apple")
+    checkout.scan("pineapple")
+    checkout.scan("pineapple")
+
+    checkout.totalUp
+
+
+    puts "Basket discounted total : #{checkout.basket_discounted_total.to_s} pence"
+    puts "Basket NON discounted total : #{checkout.basket_non_discounted_total.to_s} pence"
+
     # checkout.scan("apple")
-
-    checkout.total
-
-    puts "Basket total : #{checkout.basket_total.to_s} pence"
-
-    checkout.scan("apple")
+    # checkout.scan("apple")
+   
     
-    checkout.scan("Clubcard","123456")
-    checkout.scan("Clubcard","6666666")
+    # checkout.scan("Clubcard","123456")
+    # checkout.scan("Clubcard","6666666")
 
-    puts (checkout.loyaltycardno.nil? ? "No loyalty card scanned " : "Loyalty card #{checkout.loyaltycardno} was scanned " )
+    # puts (checkout.loyaltycardno.nil? ? "No loyalty card scanned " : "Loyalty card #{checkout.loyaltycardno} was scanned " )
 
-    checkout.total
+    # checkout.totalUp
 
-    puts "Basket total : #{checkout.basket_total.to_s} pence"
+    # puts "Basket discounted total : #{checkout.basket_discounted_total.to_s} pence"
+    # puts "Basket NON discounted total : #{checkout.basket_non_discounted_total.to_s} pence"
+
 
 end 
 
