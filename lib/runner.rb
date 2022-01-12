@@ -2,8 +2,6 @@ require_relative "checkout.rb"
 # require_relative "methods.rb"
 # require_relative "dbstuff.rb"
 
-
-
 puts "Running Checkout ........"
 
 debug = true
@@ -17,44 +15,41 @@ puts (debug ? "Debug mode operating " : "Not in debug mode")
 
 # DB_VIEW = connectdb
 
-
 if debug
 
-    # Set rules for pricepolicy and discounts
-    # Item pricing policy would normally be consumed from a db.
-    # This is has global scope to facilitate that simulation
-  
-    checkout = Checkout.new
- 
+  # Set rules for pricepolicy and discounts
+  # Item pricing policy would normally be consumed from a db.
+  # This is has global scope to facilitate that simulation
 
-    checkout.scan("pineapple")
-    checkout.scan("pineapple")
-    checkout.scan("pineapple")
-    checkout.scan("pineapple")
-    # checkout.scan("pineapple")
+  checkout = Checkout.new
 
-    checkout.totalUp
+  checkout.scan("apple")
+  checkout.scan("apple")
+  checkout.scan("marrow")
+  checkout.scan("rogue")
+  # checkout.scan("pineapple")
 
+  checkout.totalUp
 
-    puts "Basket discounted total : #{checkout.basket_discounted_total.to_s} pence"
-    puts "Basket NON discounted total : #{checkout.basket_non_discounted_total.to_s} pence"
+  checkout.scan("orange")
+  checkout.totalUp
 
-    # checkout.scan("apple")
-    # checkout.scan("apple")
-   
-    
-    # checkout.scan("Clubcard","123456")
-    # checkout.scan("Clubcard","6666666")
+  puts "Basket discounted total : #{checkout.basket_discounted_total.to_s} pence"
+  puts "Basket NON discounted total : #{checkout.basket_non_discounted_total.to_s} pence"
 
-    # puts (checkout.loyaltycardno.nil? ? "No loyalty card scanned " : "Loyalty card #{checkout.loyaltycardno} was scanned " )
+  # checkout.scan("apple")
+  # checkout.scan("apple")
 
-    # checkout.totalUp
+  # checkout.scan("Clubcard","123456")
+  # checkout.scan("Clubcard","6666666")
 
-    # puts "Basket discounted total : #{checkout.basket_discounted_total.to_s} pence"
-    # puts "Basket NON discounted total : #{checkout.basket_non_discounted_total.to_s} pence"
+  # puts (checkout.loyaltycardno.nil? ? "No loyalty card scanned " : "Loyalty card #{checkout.loyaltycardno} was scanned " )
 
+  # checkout.totalUp
 
-end 
+  # puts "Basket discounted total : #{checkout.basket_discounted_total.to_s} pence"
+  # puts "Basket NON discounted total : #{checkout.basket_non_discounted_total.to_s} pence"
+
+end
 
 puts "End of checkout !"
-

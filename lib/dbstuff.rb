@@ -1,7 +1,4 @@
-
-
 class Db
-
   def initialize()
     @pricingRules = connectdb
   end
@@ -11,21 +8,19 @@ class Db
   end
 end
 
-
 def connectdb
-
   pricing_rules = {
-    
-      "apple" => PricePolicy.new(10, BatchDiscount.new(2, 1, -1)), #bogoff
-      "orange" => PricePolicy.new(20),
-      "pear" => PricePolicy.new(15, BatchDiscount.new(2, 1, -1)), #bogoff
-      "banana" => PricePolicy.new(30, PercentDiscount.new(50,-1)),
-      "pineapple" => PricePolicy.new(100, PercentDiscount.new(50,1)),
-      "mango" => PricePolicy.new(200, BatchDiscount.new(3, 1, 1)),
-      "rogue" => PricePolicy.new(30, RogueDiscount.new(50)), 
-    }
 
-    return pricing_rules
+    "apple" => PricePolicy.new(10, BatchDiscount.new(2, 1, -1)), #bogoff
+    "orange" => PricePolicy.new(20),
+    "pear" => PricePolicy.new(15, BatchDiscount.new(2, 1, -1)), #bogoff
+    "banana" => PricePolicy.new(30, PercentDiscount.new(50, -1)),
+    "pineapple" => PricePolicy.new(100, PercentDiscount.new(50, 1)),
+    "mango" => PricePolicy.new(200, BatchDiscount.new(3, 1, 1)),
+    "melon" => PricePolicy.new(30, RogueDiscount.new(50)),
+  }
+
+  return pricing_rules
 end
 
 class PricePolicy
@@ -59,7 +54,7 @@ class BatchDiscount
 end
 
 class PercentDiscount
-  #  Precentage reduction e.g half price = -50%, and how many times allowed
+  #  Precentage reduction e.g half price = -50%, and how many items/times allowed
   attr_reader :percentile, :per_customer_limit
 
   def initialize(percentile, per_customer_limit)
