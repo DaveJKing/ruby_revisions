@@ -2,7 +2,7 @@ require 'checkout'
 
 RSpec.describe Checkout do
   describe 'Checkout' do
-    subject(:total) { checkout.total}
+    # subject(:total) { checkout.total}
     let(:checkout) { Checkout.new }
 
     context 'when no offers apply' do
@@ -106,24 +106,22 @@ RSpec.describe Checkout do
       it 'returns the discounted price for the basket' do
         
         expect(checkout.basket_discounted_total).to eq(150)
-        # This is right below
-        # expect(checkout.basket_discounted_total).to eq(150)
-      end
+         end
     end
 
 
-    # context 'when a buy 3 get 1 free offer applies to mangos' do
-    #   before do
-    #     4.times { checkout.scan("mango") }
-    #     checkout.totalUp
+    context 'when a buy 3 get 1 free offer applies to mangos' do
+      before do
+        4.times { checkout.scan("mango") }
+        checkout.totalUp
 
-    #   end
+      end
 
-    #   it 'returns the discounted price for the basket' do
-    #     # pending 'You need to write the code to satisfy this test'
-    #     expect(checkout.basket_discounted_total).to eq(600)
-    #   end
-    # end
+      it 'returns the discounted price for the basket' do
+        # pending 'You need to write the code to satisfy this test'
+        expect(checkout.basket_discounted_total).to eq(600)
+      end
+    end
   
   end
 end

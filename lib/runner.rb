@@ -29,6 +29,9 @@ if debug
 
     checkout.scan("pineapple")
     checkout.scan("pineapple")
+    checkout.scan("pineapple")
+    checkout.scan("pineapple")
+    # checkout.scan("pineapple")
 
     checkout.totalUp
 

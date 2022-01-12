@@ -56,22 +56,24 @@ class Checkout
             
                     discountQty = itemQuanityPurchased - (itemRuleDiscount.quantity_threshold )
                     discountTotal = discountQty * itemRuleDiscount.discount_price
-                    @basket_discounted_total += baseTotal + discountTotal
+                    subTotal = baseTotal + discountTotal
                           
                 else
                     # "Discount threshold NOT reached !"
-                    @basket_discounted_total += itemQuanityPurchased * itemRule.base_price
+                    subTotal = itemQuanityPurchased * itemRule.base_price
                 end
+
+                @basket_discounted_total += subTotal
+                
             when "BatchDiscount", "batchdiscount"
                 #  Buy n get y free, happens prefined times or perpetually
                 
-               
-                puts (itemRuleDiscount.occurs_max == -1 ? "Discount strategy is infinite for #{item}  " : "Discount strategy is limited to  #{itemRuleDiscount.occurs_max} occurrences for #{item} " )
+                puts (itemRuleDiscount.occurs_max == -1 ? "Discount strategy is infinite for #{item}  " : "Discount strategy is restricted to  #{itemRuleDiscount.occurs_max} occurrences for #{item} " )
                
   
                 if itemQuanityPurchased  >= itemRuleDiscount.buys 
-                  puts "Batch discount applies for #{item} "
-  
+                  # Discount applies to whole purchase for this item
+                
                   discountMultiples = itemQuanityPurchased.div(itemRuleDiscount.buys)
   
                   if itemRuleDiscount.occurs_max == -1 
@@ -79,29 +81,40 @@ class Checkout
                     subTotal = (itemQuanityPurchased - ( discountMultiples * itemRuleDiscount.gets_free)) * itemRule.base_price
                   else
                     # Limited discount applies i.e n per customer
-                    puts "Limited discount applies e.g n per customer for #{item} "
                     subTotal = (itemQuanityPurchased - ( itemRuleDiscount.occurs_max * itemRuleDiscount.gets_free)) * itemRule.base_price
                   end
                  
                 else
-                  # No discount 
-                  puts "No batch discount applies for #{item} "
+                  # No discount applied
                   subTotal = itemQuanityPurchased * itemRule.base_price
                 end
   
                 @basket_discounted_total += subTotal
             when "PercentDiscount", "percentdiscount"
-                 puts "Percent discount"
-  
-                 undiscountedTotal = itemQuanityPurchased * itemRule.base_price
-                 discount = (undiscountedTotal * itemRuleDiscount.percentile)/100
-                 subTotal = undiscountedTotal - discount
+
+                 puts (itemRuleDiscount.per_customer_limit == -1 ? "Discount strategy is infinite for #{item}  " : "Discount strategy is restricted to  #{itemRuleDiscount.per_customer_limit} occurrences for #{item} " )
+               
+                if itemRuleDiscount.per_customer_limit == -1 
+                    undiscountedTotal = itemQuanityPurchased * itemRule.base_price
+                    discount = (undiscountedTotal * itemRuleDiscount.percentile)/100
+
+                    subTotal = undiscountedTotal - discount
+                else
+                    #  Limited discount applies e.g n per customer for #{item} 
+
+                    undiscountedTotal = itemQuanityPurchased * itemRule.base_price
+                    allowedDiscountMaxPerItem =  (itemRule.base_price )  * itemRuleDiscount.percentile/100
+                    allowedDiscountMax = itemRuleDiscount.per_customer_limit * allowedDiscountMaxPerItem
+
+                    subTotal = undiscountedTotal - allowedDiscountMax
+                end
                
                  @basket_discounted_total += subTotal
             else
                 #  This section should only apply to items without a discount policy,
                 #  check for unknown policy class
-                puts "No discount scheme for #{item} "
+                #  No discount scheme for #{item} 
+
                 if itemRule.discounts[0].class.name == "NilClass"
                     @basket_discounted_total += itemQuanityPurchased * itemRule.base_price
                 else
