@@ -2,7 +2,6 @@ require "checkout"
 
 RSpec.describe Checkout do
   describe "Checkout" do
-   
     let(:checkout) { Checkout.new }
 
     context "when no offers apply" do
@@ -106,6 +105,7 @@ RSpec.describe Checkout do
     end
 
     # Enhancements
+    # *************************************************
 
     context "when no offers apply but a clubcard is also presented" do
       before do
@@ -123,7 +123,6 @@ RSpec.describe Checkout do
         expect(checkout.loyaltycardno).to eq("123456")
       end
     end
-
 
     # ***********************************************
 
@@ -152,7 +151,7 @@ RSpec.describe Checkout do
         end
       end
     end
-   
+
     # ***********************************************
 
     context "when an item is scanned, is in the databse the the policy handler has not been coded" do
@@ -165,6 +164,23 @@ RSpec.describe Checkout do
 
       it "returns the base price for the basket" do
         expect(checkout.basket_discounted_total).to eq(10)
+      end
+    end
+
+    # ***********************************************
+
+    context "when a Linear discount policy is used " do
+      before do
+        4.times { checkout.scan("cactus") }
+        checkout.totalUp
+      end
+
+      it "returns the discounted price for the basket" do
+        expect(checkout.basket_discounted_total).to eq(50)
+      end
+
+      it "returns the discounted price for the basket" do
+        expect(checkout.basket_non_discounted_total).to eq(60)
       end
     end
   end

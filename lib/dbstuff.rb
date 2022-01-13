@@ -17,7 +17,10 @@ def connectdb
     "banana" => PricePolicy.new(30, PercentDiscount.new(50, -1)),
     "pineapple" => PricePolicy.new(100, PercentDiscount.new(50, 1)),
     "mango" => PricePolicy.new(200, BatchDiscount.new(3, 1, 1)),
+    
+    # Enhancements
     "melon" => PricePolicy.new(30, RogueDiscount.new(50)),
+    "cactus" => PricePolicy.new(15, LinearDiscount.new(10, 2)),
   }
 
   return pricing_rules
@@ -32,15 +35,6 @@ class PricePolicy
   end
 end
 
-class LinearDiscount
-  # Base price operates but discount price kicks in after quantity threshold
-  attr_reader :discount_price, :quantity_threshold
-
-  def initialize(discount_price, quantity_threshold)
-    @discount_price = discount_price
-    @quantity_threshold = quantity_threshold
-  end
-end
 
 class BatchDiscount
   #  Buy n get y free, happens prefined times or perpetually
@@ -60,6 +54,19 @@ class PercentDiscount
   def initialize(percentile, per_customer_limit)
     @percentile = percentile
     @per_customer_limit = per_customer_limit
+  end
+end
+
+# Enhancements 
+# **********************************************
+
+class LinearDiscount
+  # Base price operates but discount price kicks in after quantity threshold
+  attr_reader :discount_price, :quantity_threshold
+
+  def initialize(discount_price, quantity_threshold)
+    @discount_price = discount_price
+    @quantity_threshold = quantity_threshold
   end
 end
 
