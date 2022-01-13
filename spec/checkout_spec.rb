@@ -2,23 +2,18 @@ require "checkout"
 
 RSpec.describe Checkout do
   describe "Checkout" do
-    # subject(:total) { checkout.total}
+   
     let(:checkout) { Checkout.new }
 
     context "when no offers apply" do
       before do
         checkout.scan("apple")
         checkout.scan("orange")
-        checkout.scan("Clubcard", "123456")
         checkout.totalUp
       end
 
       it "returns the base price for the basket" do
         expect(checkout.basket_discounted_total).to eq(30)
-      end
-
-      it "returns the loyalty card ref no" do
-        expect(checkout.loyaltycardno).to eq("123456")
       end
     end
 
@@ -42,10 +37,6 @@ RSpec.describe Checkout do
 
         it "returns the correctly discounted price for the basket" do
           expect(checkout.basket_discounted_total).to eq(30)
-        end
-
-        it "returns the correctly NON discounted price for the basket" do
-          expect(checkout.basket_non_discounted_total).to eq(40)
         end
       end
     end
@@ -114,13 +105,61 @@ RSpec.describe Checkout do
       end
     end
 
+    # Enhancements
+
+    context "when no offers apply but a clubcard is also presented" do
+      before do
+        checkout.scan("apple")
+        checkout.scan("orange")
+        checkout.scan("Clubcard", "123456")
+        checkout.totalUp
+      end
+
+      it "returns the base price for the basket" do
+        expect(checkout.basket_discounted_total).to eq(30)
+      end
+
+      it "returns the loyalty card ref no" do
+        expect(checkout.loyaltycardno).to eq("123456")
+      end
+    end
+
+
     # ***********************************************
 
-    context "when apple bogoff applies and rogue items exist" do
+    context "when apple bogoff applies and we wish to show no discounted basket price" do
+      before do
+        2.times { checkout.scan("apple") }
+        checkout.totalUp
+      end
+
+      it "returns the base price for the basket" do
+        expect(checkout.basket_discounted_total).to eq(10)
+      end
+
+      context "and there are other items" do
+        before do
+          checkout.scan("orange")
+          checkout.totalUp
+        end
+
+        it "returns the correctly discounted price for the basket" do
+          expect(checkout.basket_discounted_total).to eq(30)
+        end
+
+        it "returns the correctly NON discounted price for the basket" do
+          expect(checkout.basket_non_discounted_total).to eq(40)
+        end
+      end
+    end
+   
+    # ***********************************************
+
+    context "when an item is scanned, is in the databse the the policy handler has not been coded" do
       before do
         2.times { checkout.scan("apple") }
         checkout.scan("marrow")
-        checkout.scan("melon")
+        # checkout.scan("melon")
         checkout.totalUp
       end
 

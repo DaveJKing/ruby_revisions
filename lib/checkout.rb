@@ -34,6 +34,7 @@ class Checkout
     @basket_non_discounted_total = 0
 
     for item, itemQuanityPurchased in @items
+   
       itemRule = @dbconnect.select(item)
 
       @basket_non_discounted_total += (itemQuanityPurchased * itemRule.base_price)

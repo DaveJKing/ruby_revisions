@@ -25,8 +25,8 @@ if debug
 
   checkout.scan("apple")
   checkout.scan("apple")
-  checkout.scan("marrow")
-  checkout.scan("rogue")
+  # checkout.scan("marrow")
+  # checkout.scan("rogue")
   # checkout.scan("pineapple")
 
   checkout.totalUp
