@@ -100,7 +100,7 @@ class Checkout
           subTotal = undiscountedTotal - allowedDiscountMax
         end
 
-        @basket_discounted_total += subTotal
+        @basket_discounted_total += subTotal.floor
       else
         #  This section should only apply to items without a discount policy,
 
